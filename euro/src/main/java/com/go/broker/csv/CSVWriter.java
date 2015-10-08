@@ -52,7 +52,7 @@ public class CSVWriter {
 			writer = new BufferedWriter(new FileWriter(fileName));
 			writer.write(output);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new FileNotFoundException(e.getMessage());
 		} finally {
 			close(writer);
 		}

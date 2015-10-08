@@ -1,9 +1,0 @@
-_id,coreCountry,country,countryCode,fullName,iata_airport_code,inEurope,latitude,locationId,longitude,name,type
-376217,true,Germany,DE,Berlin Germany,,true,52.52437,8384,13.41053,Berlin,location
-448103,true,Italy,IT,Berlingo Italy,,true,45.50298,147721,10.04366,Berlingo,location
-425332,true,Germany,DE,Berlingerode Germany,,true,51.45775,124675,10.2384,Berlingerode,location
-425326,true,Germany,DE,Bernau bei Berlin Germany,,true,52.67982,124669,13.58708,Bernau bei Berlin,location
-314826,true,Germany,DE,Berlin Tegel (TXL) Germany,TXL,true,52.5548,,13.28903,Berlin Tegel,airport
-314827,true,Germany,DE,Berlin Sch�nefeld (SXF) Germany,SXF,true,52.3887261,,13.5180874,Berlin Sch�nefeld,airport
-334196,true,Germany,DE,Berlin Hbf Germany,,true,52.525589,,13.369548,Berlin Hbf,station
-333977,true,Germany,DE,Berlin Ostbahnhof Germany,,true,52.510972,,13.434567,Berlin Ostbahnhof,station

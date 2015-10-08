@@ -47,7 +47,6 @@ public class JsonHandler {
 	    try {
 	        listOfJsonObj = parseArray(jsonArray);
 	    } catch (Exception e) {
-	    	e.printStackTrace();
 	        throw new JsonParseException("Json has bad structure");
 	    }
 	    return listOfJsonObj;

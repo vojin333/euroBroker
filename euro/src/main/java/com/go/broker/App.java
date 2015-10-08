@@ -22,8 +22,10 @@ import com.google.gson.JsonParser;
 public class App {
 	public static void main(String[] args) {
 
-		String city = args[0];
-		
+		String city = null;
+		if (args.length != 0) {
+			city = args[0];
+		}
 		
 		if (city != null) {
 			System.out.println("Starting .... for city = " + city);
@@ -38,8 +40,8 @@ public class App {
 					JsonArray jsonArray = parser.parse(response).getAsJsonArray();
 					if (jsonArray.size() != 0) {
 						List<Map<String, String>> flatJson = jsonHandler.handleAsJsonArray(jsonArray);
-						csvWriter.writeAsCSV(flatJson, "sample.csv");
-						System.out.println("File has been written under /target/sample.scv");
+						csvWriter.writeAsCSV(flatJson, city + ".csv");
+						System.out.println("File has been written under /target/" + city + ".csv");
 					} else {
 						System.out.println("Response array is Empty,  No Inforamtions for city " + city);
 					}
@@ -48,15 +50,11 @@ public class App {
 				}
 
 			} catch (FileNotFoundException e) {
-				System.out.println("Error while writing csv");
-				e.printStackTrace();
+				System.out.println("Error while writing csv" + "  Reason = " + e.getMessage());
 			} catch (WebServiceException e) {
-				// TODO Auto-generated catch block
-				System.out.println("Error while calling rest service");
-				e.printStackTrace();
+				System.out.println("Error while calling rest service" + "  Reason = " + e.getMessage());
 			} catch (JsonParseException e) {
-				System.out.println("Error while parsing Json");
-				e.printStackTrace();
+				System.out.println("Error while parsing Json" + "  Reason = " + e.getMessage());
 			}
 		} else {
 			System.out.println("Run jar with city as arrgument");

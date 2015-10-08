@@ -35,7 +35,6 @@ public class RestBroker {
 
 			response = responseJson.readEntity(String.class);
 		} catch (WebServiceException e) {
-			e.printStackTrace();
 			throw e;
 
 		}
