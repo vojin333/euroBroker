@@ -1,4 +1,4 @@
-package com.go.broker;
+package com.go.broker.restClient;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -8,6 +8,11 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.ws.WebServiceException;
 
+/**
+ * 
+ * @author Vojin Nikolic
+ *
+ */
 public class RestBroker {
 
 	private final Client client;
@@ -18,7 +23,7 @@ public class RestBroker {
 	public String returnResponse(String resource) throws WebServiceException{
 		String response = null;
 		try {
-			String serviceUri = "http://localhost:8080/fterm-microservices/esma/registers/services/fterm/finalTermNotifications/";
+			String serviceUri = "http://api.goeuro.com/api/v2/position/suggest/en/";
 			WebTarget target = client.target(serviceUri).path(resource);
 
 			Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON_TYPE);

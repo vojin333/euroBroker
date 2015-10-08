@@ -1,14 +1,14 @@
 package com.go.broker;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Reader;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.core.Response;
 import javax.xml.ws.WebServiceException;
 
+import com.go.broker.csv.CSVWriter;
+import com.go.broker.jsonHandler.JsonHandler;
+import com.go.broker.restClient.RestBroker;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -23,9 +23,10 @@ public class App {
 	public static void main(String[] args) {
 
 		String city = args[0];
-		System.out.println("Hello World!" + city);
+		
 		
 		if (city != null) {
+			System.out.println("Starting .... for city = " + city);
 			try {
 				RestBroker restBroker = new RestBroker();
 				JsonHandler jsonHandler = new JsonHandler();
@@ -38,6 +39,7 @@ public class App {
 					if (jsonArray.size() != 0) {
 						List<Map<String, String>> flatJson = jsonHandler.handleAsJsonArray(jsonArray);
 						csvWriter.writeAsCSV(flatJson, "sample.csv");
+						System.out.println("File has been written under /target/sample.scv");
 					} else {
 						System.out.println("Response array is Empty,  No Inforamtions for city " + city);
 					}
