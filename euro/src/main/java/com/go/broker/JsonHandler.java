@@ -1,9 +1,7 @@
 package com.go.broker;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -12,6 +10,7 @@ import java.util.Set;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 
 
 /**
@@ -41,13 +40,13 @@ public class JsonHandler {
 	 * @throws Exception
 	 * @see
 	 */
-	public List<Map<String, String>> handleAsJsonArray(JsonArray jsonArray) throws Exception {
+	public List<Map<String, String>> handleAsJsonArray(JsonArray jsonArray) throws JsonParseException {
 	    List<Map<String, String>> listOfJsonObj = null;
 	    try {
 	        listOfJsonObj = parseArray(jsonArray);
 	    } catch (Exception e) {
 	    	e.printStackTrace();
-	        throw new Exception("Json has bad structure");
+	        throw new JsonParseException("Json has bad structure");
 	    }
 	    return listOfJsonObj;
 	}

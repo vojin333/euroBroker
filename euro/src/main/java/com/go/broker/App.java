@@ -6,7 +6,11 @@ import java.io.Reader;
 import java.util.List;
 import java.util.Map;
 
+import javax.ws.rs.core.Response;
+import javax.xml.ws.WebServiceException;
+
 import com.google.gson.JsonArray;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 
 /**
@@ -18,68 +22,43 @@ import com.google.gson.JsonParser;
 public class App {
 	public static void main(String[] args) {
 
-		System.out.println("Hello World!");
-		// RestBroker restBroker = new RestBroker();
-		// restBroker.returnJson("Berlin");
+		String city = args[0];
+		System.out.println("Hello World!" + city);
+		
+		if (city != null) {
+			try {
+				RestBroker restBroker = new RestBroker();
+				JsonHandler jsonHandler = new JsonHandler();
+				CSVWriter csvWriter = new CSVWriter();
+				
+				String response = restBroker.returnResponse(city);
+				if (response != null) {
+					JsonParser parser = new JsonParser();
+					JsonArray jsonArray = parser.parse(response).getAsJsonArray();
+					if (jsonArray.size() != 0) {
+						List<Map<String, String>> flatJson = jsonHandler.handleAsJsonArray(jsonArray);
+						csvWriter.writeAsCSV(flatJson, "sample.csv");
+					} else {
+						System.out.println("Response array is Empty,  No Inforamtions for city " + city);
+					}
+				} else {
+					System.out.println("Response is null");
+				}
 
-		System.out.println("Args = " + args.toString());
-
-		JsonHandler jsonHandler = new JsonHandler();
-		CSVWriter csvWriter = new CSVWriter();
-
-		try {
-			Reader json = new FileReader("D:/My Stuff/JsonToCsv/euro/json/json.json");
-
-			JsonParser parser = new JsonParser();
-			JsonArray jsonArray = parser.parse(json).getAsJsonArray();
-			if (jsonArray.size() != 0) {
-				List<Map<String, String>> flatJson = jsonHandler.handleAsJsonArray(jsonArray);
-				csvWriter.writeAsCSV(flatJson, "sample.csv");
-			} else {
-				System.out.println("Response is Empty");
+			} catch (FileNotFoundException e) {
+				System.out.println("Error while writing csv");
+				e.printStackTrace();
+			} catch (WebServiceException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Error while calling rest service");
+				e.printStackTrace();
+			} catch (JsonParseException e) {
+				System.out.println("Error while parsing Json");
+				e.printStackTrace();
 			}
-
-			// csvWriter.writeToFile(jsonHandler.parseJson().toString(),
-			// "json.csv");
-		} catch (FileNotFoundException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} else {
+			System.out.println("Run jar with city as arrgument");
+			System.exit(0);
 		}
-
-//        try {
-//
-//			URL url = new URL("http://api.goeuro.com/api/v2/position/suggest/en/Berlin");
-//			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//			conn.setRequestMethod("GET");
-//			conn.setRequestProperty("Accept", "application/json");
-//
-//			if (conn.getResponseCode() != 200) {
-//				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
-//			}
-//
-//			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-//
-//			String output;
-//			System.out.println("Output from Server .... \n");
-//			while ((output = br.readLine()) != null) {
-//				System.out.println(output);
-//			}
-//
-//			conn.disconnect();
-//
-//		} catch (MalformedURLException e) {
-//
-//    		e.printStackTrace();
-//
-//    	  } catch (IOException e) {
-//
-//    		e.printStackTrace();
-//
-//    	  }
-    }
-    
-
+	}
 }

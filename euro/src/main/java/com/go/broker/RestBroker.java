@@ -6,6 +6,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.ws.WebServiceException;
 
 public class RestBroker {
 
@@ -14,40 +15,29 @@ public class RestBroker {
 		client = ClientBuilder.newClient();
 	}
 	
-	public Response returnJson(String resource) {
-		Response response = getJson(resource);
+	public String returnResponse(String resource) throws WebServiceException{
+		String response = null;
 		try {
-			resolveResponse(response);
+			String serviceUri = "http://localhost:8080/fterm-microservices/esma/registers/services/fterm/finalTermNotifications/";
+			WebTarget target = client.target(serviceUri).path(resource);
 
-		} catch (Exception e) {
+			Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON_TYPE);
+			Response responseJson = invocationBuilder.get();
+
+			if (!isResponseSuccessful(responseJson)) {
+				throw new WebServiceException("Failed : HTTP error code : " + responseJson.getStatus());
+			}
+
+			response = responseJson.readEntity(String.class);
+		} catch (WebServiceException e) {
 			e.printStackTrace();
+			throw e;
+
 		}
 		return response;
 	}
 	
-	private Response getJson(String resource) {
-		WebTarget target = createWebTarget(resource);
-		Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON_TYPE);
-		Response response = invocationBuilder.get();
-		
-		return response;
-	}
-
-	private WebTarget createWebTarget(String resource) {
-		String serviceUri = "http://api.goeuro.com/api/v2/position/suggest/en/";
-		WebTarget target = client.target(serviceUri).path(resource);
-		return target;
-	}
-
 	
-	private Response resolveResponse(Response response) throws Exception {
-		if (isResponseSuccessful(response)) {
-			return response;
-		} else {
-			throw new Exception();
-		}
-	}
-    
 	private boolean isResponseSuccessful(Response response) {
 		return Response.Status.OK.getStatusCode() == response.getStatus();
 	}
